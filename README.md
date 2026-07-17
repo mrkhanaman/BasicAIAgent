@@ -55,7 +55,7 @@ project/
 ├── tools.py
 ├── data/
 │   └── customer_data.csv
-├── extraFiles
+├── xtraFiles
 └── README.md
 ```
 
