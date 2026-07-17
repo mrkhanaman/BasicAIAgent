@@ -5,15 +5,6 @@ from tools import get_policy
 from tools import TOOLS
 from prompts import SYSTEM_PROMPT
 
-# short-term memory
-conversation = [
-    {
-        "role": "system",
-        "content": SYSTEM_PROMPT
-    }
-] 
-
-
 print("=== Insurance AI Agent ===")
 print("Type 'exit' to quit.\n")
 
@@ -75,36 +66,20 @@ while True:
     if question.lower() == "exit":
         break
 
-# Frist LLM call
-#    response = chat(
-#        model="llama3.2:3b",
-#        messages=[
-#            {
-#                "role": "system",
-#                "content": SYSTEM_PROMPT
-#            },
-#            {
-#                "role": "user",
-#                "content": question
-#            }
-#        ],
-#        tools=TOOLS
-#    )
-
-#short-term memory
-    conversation.append(
-        {
-            "role": "user",
-            "content": question
-        }
-    )
-
     response = chat(
         model="llama3.2:3b",
-        messages=conversation,
+        messages=[
+            {
+                "role": "system",
+                "content": SYSTEM_PROMPT
+            },
+            {
+                "role": "user",
+                "content": question
+            }
+        ],
         tools=TOOLS
     )
-
 
 # Use below code to debug the tool calls and arguments
 #    from pprint import pprint
@@ -177,14 +152,6 @@ while True:
         print("AI:")
 
         print(final_response.message.content)
-
-        #Short-term memory
-        conversation.append(
-            {
-                "role": "assistant",
-                "content": final_response.message.content
-            }
-        )
 
         print()
 

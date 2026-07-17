@@ -5,15 +5,6 @@ from tools import get_policy
 from tools import TOOLS
 from prompts import SYSTEM_PROMPT
 
-# short-term memory
-conversation = [
-    {
-        "role": "system",
-        "content": SYSTEM_PROMPT
-    }
-] 
-
-
 print("=== Insurance AI Agent ===")
 print("Type 'exit' to quit.\n")
 
@@ -75,36 +66,20 @@ while True:
     if question.lower() == "exit":
         break
 
-# Frist LLM call
-#    response = chat(
-#        model="llama3.2:3b",
-#        messages=[
-#            {
-#                "role": "system",
-#                "content": SYSTEM_PROMPT
-#            },
-#            {
-#                "role": "user",
-#                "content": question
-#            }
-#        ],
-#        tools=TOOLS
-#    )
-
-#short-term memory
-    conversation.append(
-        {
-            "role": "user",
-            "content": question
-        }
-    )
-
     response = chat(
         model="llama3.2:3b",
-        messages=conversation,
+        messages=[
+            {
+                "role": "system",
+                "content": SYSTEM_PROMPT
+            },
+            {
+                "role": "user",
+                "content": question
+            }
+        ],
         tools=TOOLS
     )
-
 
 # Use below code to debug the tool calls and arguments
 #    from pprint import pprint
@@ -152,22 +127,16 @@ while True:
                 {
                     "role": "assistant",
                     "content": (
-                        "Tool Execution Result:\n"
-                        f"{policy}"
+                        f"I called the tool get_policy() "
+                        f"and received the following result:\n{policy}"
                     )
                 },
                 {
                     "role": "user",
                     "content": (
-                                "You must answer ONLY using the tool result provided.\n\n"
-                                "Rules:\n"
-                                "1. Do NOT make assumptions.\n"
-                                "2. Do NOT add insurance advice.\n"
-                                "3. Do NOT add warnings or disclaimers.\n"
-                                "4. Do NOT invent any information.\n"
-                                "5. If the tool returns an error, politely explain it.\n"
-                                "6. If information is missing, clearly state that it is unavailable.\n"
-                                "7. Keep the answer concise, professional and customer-friendly."
+                        "Using only the tool result above, "
+                        "answer the customer's question professionally. "
+                        "If the tool returned an error, explain it politely."
                     )
                 }
             ]
@@ -177,14 +146,6 @@ while True:
         print("AI:")
 
         print(final_response.message.content)
-
-        #Short-term memory
-        conversation.append(
-            {
-                "role": "assistant",
-                "content": final_response.message.content
-            }
-        )
 
         print()
 
