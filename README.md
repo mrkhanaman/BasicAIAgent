@@ -282,5 +282,5 @@ Understanding these fundamentals first makes it much easier to adopt orchestrati
 
 ## Author
 
-**Aman Khan**
-Solution Architect 
+**Amanulla Khan**
+Solutions Architect 
